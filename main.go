@@ -127,8 +127,7 @@ func main() {
 	//Detect operation
 	sign, err := DetectOperation(str) //sign это знак + - * /
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 
 	convert := strings.Split(string(str), string(sign)) // Split
@@ -136,22 +135,22 @@ func main() {
 	leftNumber, leftNumType, err := FindNumberInString(strings.TrimSpace(strings.ToUpper(convert[0])))
 	//Find the right number
 	rightNumber, rightNumType, err := FindNumberInString(strings.TrimSpace(strings.ToUpper(convert[1])))
-
+	if leftNumber < 1 || leftNumber > 10 || rightNumber < 1 || rightNumber > 10 {
+		panic(errors.New("Ошибка, числа должны быть от 1 до 10"))
+	}
 	//Checking the type of left and right digits
 	if leftNumType != rightNumType {
-		fmt.Println("Ошибка, так как используются одновременно разные системы счисления.")
-		return
+		panic(errors.New("Ошибка, так как используются одновременно разные системы счисления."))
 	}
 	//Get result Calc
 	result, err := Calc(leftNumber, rightNumber, sign)
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	if leftNumType == false {
 		if result <= 0 {
-			fmt.Println("Ошибка, так как в римской системе нет ноля и отрицательных чисел.")
-			return
+			panic(errors.New("Ошибка, так как в римской системе нет ноля и отрицательных чисел."))
 		}
 		fmt.Println(ArabToRoman(result))
 		return
